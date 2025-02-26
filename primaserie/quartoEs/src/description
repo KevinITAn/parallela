@@ -1,0 +1,5 @@
+RAM-> a livello di memoria non vediamo nulla di che visto che ogni thread alla fin ha solo poche variabili
+CPU-> qui vediamo un grande incremento con l'aumentare di numThread questo perchè quando lo scheduler da un core
+al nostro thread questo lo andrà a usarlo completamente. Lo scheduler può togliere il core al thread e darlo a un altro thread uguale,
+ ma se ho più thread che core, la CPU si riempie rapidamente. Se numThreads > numCore, lo scheduler farà context switching rapido tra i thread,
+ aumentando l'overhead e facendo lavorare ancora di più la CPU.

@@ -21,31 +21,13 @@ public class Main extends RailwayQuest {
 
         //create thread
 
-        Thread redThread=new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for(int i=0;i<10;i++)
-                    for(int j=0;j<16;j++)
-                        redTrain.move();
-            }
-        });
+        Thread redThread=new Thread(new CommonTrain(redTrain));
+        Thread greenThread=new Thread(new CommonTrain(greenTrain));
 
-        Thread greenThread=new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for(int i=0;i<10;i++)
-                    for(int j=0;j<16;j++)
-                        greenTrain.move();
-            }
-        });
-
-        Thread blueThread=new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for(int i=0;i<27;i++)
-                    for(int j=0;j<6;j++)
-                        blueTrain.move();
-            }
+        Thread blueThread=new Thread(() -> {
+            for(int i=0;i<27;i++)
+                for(int j=0;j<6;j++)
+                    blueTrain.move();
         });
 
         Thread yellowThread=new Thread(new Runnable() {
@@ -79,6 +61,6 @@ public class Main extends RailwayQuest {
     }
 
     public static void main(String[] args) {
-        new Main().execute("LEVL-NRZD-B8CR-G9GZ-4J9H");
+        new Main().execute("");
     }
 }

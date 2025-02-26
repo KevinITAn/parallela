@@ -32,10 +32,10 @@ public class Main {
         Thread thread1 = new Thread(new Worker(), "Thread 1");
         Thread thread2 = new Thread(new Worker(), "Thread 2");
 
-        //set priority
+        //set priority PART A
 
-        //thread2.setPriority(10);
-        //thread1.setPriority(1);
+        thread2.setPriority(10);
+        thread1.setPriority(1);
 
         // Start Worker threads
         thread1.start();

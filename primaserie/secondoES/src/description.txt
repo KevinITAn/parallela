@@ -1,0 +1,5 @@
+Aggiungendo solo le priority ho notato,facendo diverse esecuzioni, che il thread2 molte volte finisce prima,ma non sempre.
+Poi togliendo le priority e aggiungendo yield() ho notato una maggiore uniformità molte volte infatti veniva eseguito un out nel thread1 e poi nel thread2 alternati
+Aggiunge poi le priority con yield() ho notato una perfetta esecuzione prima del thread con priorità alta e poi con priority bassa penso
+perchè lo scheduler inizi dal thread con priority più alta e lo yield non faccia nulla perchè non ci sono altri thread con priorità uguale
+poi appena finito l'esecuzione del thread con priorità alta succeda la stessa cosa nel thread con priorità bassa
