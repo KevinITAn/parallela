@@ -1,6 +1,8 @@
 import org.isin.railwayquest.client.RailwayQuest;
 import org.isin.railwayquest.client.Train;
 
+import java.util.List;
+
 public class Main extends RailwayQuest {
     @Override
     protected void execute(String token) {
@@ -21,8 +23,8 @@ public class Main extends RailwayQuest {
 
         //create thread
 
-        Thread redThread=new Thread(new CommonTrain(redTrain));
-        Thread greenThread=new Thread(new CommonTrain(greenTrain));
+        Thread redThread=new Thread(new CommonTrain());
+        Thread greenThread=new Thread(new CommonTrain());
 
         Thread blueThread=new Thread(() -> {
             for(int i=0;i<27;i++)
@@ -39,21 +41,22 @@ public class Main extends RailwayQuest {
             }
         });
 
+
+
         // scheduling of thread
-        redThread.start();
-        greenThread.start();
-        yellowThread.start();
-        blueThread.start();
+        List<Thread> threadList= List.of(yellowThread,blueThread,greenThread,redThread);
+
+        for(Thread rsc:threadList)
+            rsc.start();
 
         //mainThread wait for 2 also thread
 
-        try {
-            greenThread.join();
-            redThread.join();
-            yellowThread.join();
-            blueThread.join();
-        } catch (InterruptedException e) {
-            System.err.println(e.getMessage());
+        for(Thread rsc:threadList){
+            try {
+                rsc.join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         // Terminate the attempt
