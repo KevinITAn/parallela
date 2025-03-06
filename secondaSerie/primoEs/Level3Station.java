@@ -1,26 +1,32 @@
+package cap02_ThreadSafety_Part1_Abate.es1;
+
 import org.isin.railwayquest.client.RailwayQuest;
 import org.isin.railwayquest.client.Train;
 
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Level3Station extends RailwayQuest {
-    ReentrantLock lock=new ReentrantLock();
+
+    private ReentrantLock lock = new ReentrantLock();
+
     private class GreenTrain extends Train implements Runnable {
         @Override
         public void run() {
             for (int lap = 1; lap <= 10; lap++) {
                 move();
+
                 lock.lock();
-                    try{
-                    move(); // Move to junction
-                    enterStation(); // Move from junction to station
+
+                try {
+                    move();
+                    enterStation();
                     passengerExchange();
-                    leaveStation(); // Move from station to junction
-                    move(); // Move from junction to track
-                    // Move back to spawn point
-                }finally {
+                    leaveStation();
+                } finally {
                     lock.unlock();
                 }
+
+                move();
                 move();
                 move();
                 move();
@@ -39,17 +45,19 @@ public class Level3Station extends RailwayQuest {
         public void run() {
             for (int lap = 1; lap <= 10; lap++) {
                 move();
+
                 lock.lock();
-                try{
-                    move(); // Move to junction
-                    enterStation(); // Move from junction to station
+
+                try {
+                    move();
+                    enterStation();
                     passengerExchange();
-                    leaveStation(); // Move from station to junction
-                    move(); // Move from junction to track
-                    // Move back to spawn point
-                }finally {
+                    leaveStation();
+                } finally {
                     lock.unlock();
                 }
+
+                move();
                 move();
                 move();
                 move();
@@ -86,6 +94,6 @@ public class Level3Station extends RailwayQuest {
     }
 
     public static void main(String[] args) {
-        new Level3Station().execute("LEVL-T9Z8-HJAI-R1UX-DY9J");
+        new Level3Station().execute("");
     }
 }
