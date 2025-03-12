@@ -1,5 +1,5 @@
 class Sensor implements Runnable {
-    private final int threshold;
+    private final int threshold;//limite condiviso
 
     public Sensor(final int threshold) {
         this.threshold = threshold;
@@ -9,7 +9,7 @@ class Sensor implements Runnable {
     public void run() {
         System.out.println("Sensor[" + threshold + "]: start monitoring!");
 
-        while (!SensorSystem.resetIfAbove(threshold)) {
+        while (!SensorSystemExplicit.resetIfAbove(threshold)) {//resetta se sopra
             /* Busy wait */
         }
 

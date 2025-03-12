@@ -1,0 +1,4 @@
+Il problema principale è la lettura presente il contract questo perchè potrebbe leggere alcuni dati che
+il main thread ha aggiornato e altri che non ha aggiornato quindi dobbiamo rendere la lettura e scirttura atomica.
+In fine dobbiamo pensare che l'aggiornamento nel main thread potrebbe portare a un visibility problem ma avendo
+già usato i lock sappiamo che sarà gia risolto.

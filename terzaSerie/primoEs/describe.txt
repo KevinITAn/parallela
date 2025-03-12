@@ -1,0 +1,4 @@
+Il problema è usageCount,occupiedCount l'accesso e la modifica concorrente a queste due variabili,
+che crea un race conditional sia di tipo check-then-do sia di tipo read modify write quindi per
+risolvere usiamo i lock. In questo caso non possiamo usare atomic variably perchè abbiamo 2 variabili
+dipendete una dall'altra.

@@ -3,15 +3,17 @@ import java.util.List;
 import java.util.Random;
 
 
-public class SensorSystem {
-    private static int amount = 0;
+public class SensoSystemIntrinsic {
+    private static int amount = 0;//condiviso e modificabile
 
-    static int incrementAndGet(final int step) {
+    //race conditional readmodify-write
+    static synchronized int incrementAndGet(final int step) {
         amount += step;
         return amount;
     }
 
-    static boolean resetIfAbove(final int threshold) {
+    //race conditional check-then-act
+    static synchronized boolean resetIfAbove(final int threshold) {
         if (amount > threshold) {
             amount = 0;
             return true;

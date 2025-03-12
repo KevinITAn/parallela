@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/primoEs.iml" filepath="$PROJECT_DIR$/.idea/primoEs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/versionA/versionA.iml" filepath="$PROJECT_DIR$/versionA/versionA.iml" />
+      <module fileurl="file://$PROJECT_DIR$/versionB/versionB.iml" filepath="$PROJECT_DIR$/versionB/versionB.iml" />
+    </modules>
+  </component>
+</project>
