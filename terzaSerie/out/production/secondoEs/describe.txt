@@ -1,0 +1,14 @@
+1)Con volatile non risolviamo i problemi di race condition, ma solo quelli di visibilità tra thread.
+
+2)Con le variabili atomiche (AtomicInteger, etc.), risolviamo il problema della race condition
+nel read-modify-write (es. incrementAndGet()), ma non il race condition nel check-then-act, perché un thread potrebbe
+essere sospeso tra il controllo (if) e l'azione, permettendo a un altro thread di modificare lo stato nel frattempo.
+
+3)Con i ReentrantLock, risolviamo tutte le race condition, sia per il read-modify-write sia per il check-then-act.
+
+4)Con i ReentrantReadWriteLock, risolviamo anche tutte le race condition, ma nel nostro caso non conviene,
+perché abbiamo molte più scritture che letture e un semplice ReentrantLock è più efficiente.
+
+5)Con gli intrinsic locks (synchronized), risolviamo i problemi di race condition, ma se in futuro volessimo
+aggiungere nuove funzionalità, potremmo essere limitati, perché gli intrinsic locks
+offrono meno flessibilità rispetto ai explict locks.

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/secondoEs/secondoEs.iml" filepath="$PROJECT_DIR$/secondoEs/secondoEs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/terzaSerie.iml" filepath="$PROJECT_DIR$/.idea/terzaSerie.iml" />
+      <module fileurl="file://$PROJECT_DIR$/terzoEs/terzoEs.iml" filepath="$PROJECT_DIR$/terzoEs/terzoEs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/primoEs/versionA/versionA.iml" filepath="$PROJECT_DIR$/primoEs/versionA/versionA.iml" />
+      <module fileurl="file://$PROJECT_DIR$/primoEs/versionB/versionB.iml" filepath="$PROJECT_DIR$/primoEs/versionB/versionB.iml" />
+    </modules>
+  </component>
+</project>

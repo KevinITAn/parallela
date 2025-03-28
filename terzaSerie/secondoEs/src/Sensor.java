@@ -9,7 +9,7 @@ class Sensor implements Runnable {
     public void run() {
         System.out.println("Sensor[" + threshold + "]: start monitoring!");
 
-        while (!SensorSystemExplicit.resetIfAbove(threshold)) {//resetta se sopra
+        while (!SensorSystemReadWriteLock.resetIfAbove(threshold)) {//resetta se sopra
             /* Busy wait */
         }
 

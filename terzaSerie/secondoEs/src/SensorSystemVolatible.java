@@ -4,7 +4,7 @@ import java.util.Random;
 
 
 public class SensorSystemVolatible {
-    private volatile static int amount = 0;//condiviso e modificabile
+    private static volatile int amount = 0;//condiviso e modificabile
 
     //race conditional readmodify-write
     static int incrementAndGet(final int step) {
