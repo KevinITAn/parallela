@@ -6,8 +6,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class TruckSpeedMonitor {
     final static AtomicBoolean isMonitoring = new AtomicBoolean(true);
 
-    final static ReentrantLock lock = new ReentrantLock();
-    static int sharedSpeed = 0;
+    private static volatile int sharedSpeed = 0;
 
     public static void main(final String[] args) {
         final ArrayList<Thread> allReaderThreads = new ArrayList<>();
@@ -26,13 +25,7 @@ public class TruckSpeedMonitor {
         // Simulate speed updates for 1000 iterations
         for (int i = 0; i < 100; i++) {
             // Acquire lock to update shared speed
-            lock.lock();
-            try {
-                sharedSpeed = random.nextInt(100); // Simulating speed in km/h
-            } finally {
-                // Release lock
-                lock.unlock();
-            }
+            setSharedSpeed(random.nextInt(100)); // Simulating speed in km/h
             // Wait 1 ms between updates
             try {
                 Thread.sleep(1);
@@ -54,5 +47,17 @@ public class TruckSpeedMonitor {
             }
 
         System.out.println("Speed monitoring terminated.");
+    }
+
+    //allReader use this method
+    public static int getSharedSpeed(){
+        return sharedSpeed;
+    }
+
+    //only main thread coll this method
+    public static void setSharedSpeed(int sharedSpeed) {
+        if(sharedSpeed<0)
+            return;
+        TruckSpeedMonitor.sharedSpeed = sharedSpeed;
     }
 }

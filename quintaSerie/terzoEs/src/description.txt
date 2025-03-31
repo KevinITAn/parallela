@@ -1,0 +1,5 @@
+In this case, I can use the One Writer, Many Readers pattern. Thanks to the use of volatile,
+I can safely manage shared and mutable resources, ensuring that only one thread can write
+while multiple threads can read simultaneously. This way, I make sure that any changes made
+by the writer thread are immediately visible to the reader threads without needing additional
+synchronization mechanisms.
