@@ -4,11 +4,10 @@ class GPS implements Runnable {
     @Override
     public void run() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
-        // Update curLocation with new coordinate
-        double lat = random.nextDouble(-90.0, +90.0);
-        double lon = random.nextDouble(-180.0, +180.0);
-
         while (!GPSSimulation.completed) {
+            // Update curLocation with new coordinate
+            double lat = random.nextDouble(-90.0, +90.0);
+            double lon = random.nextDouble(-180.0, +180.0);
             GPSSimulation.lock.lock();
             try {
                 GPSSimulation.curLocation = new Coordinate(lat,lon);
