@@ -13,7 +13,7 @@ class ElectricCompany implements Runnable {
 
         EnergyConsumptionSimulation.lock.lock();
         try{
-            EnergyConsumptionSimulation.electricityMeter = new ElectricityMeter();
+                EnergyConsumptionSimulation.electricityMeter = new ElectricityMeter();
             //sveglia tutti i thread
             EnergyConsumptionSimulation.condition.signalAll();
         }finally {

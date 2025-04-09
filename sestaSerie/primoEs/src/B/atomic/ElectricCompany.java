@@ -13,7 +13,8 @@ class ElectricCompany implements Runnable {
             return;
         }
 
-        EnergyConsumptionSimulation.electricityMeter = new AtomicReference<>(new ElectricityMeter());
+        final ElectricityMeter electricityMeter = new ElectricityMeter();
+        EnergyConsumptionSimulation.electricityMeter.set(electricityMeter);
         System.out.println("ElectricCompany: electricity meter installed. Starting consumption monitoring");
 
         try {
