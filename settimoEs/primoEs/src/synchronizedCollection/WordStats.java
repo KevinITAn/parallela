@@ -1,3 +1,5 @@
+package synchronizedCollection;
+
 /**
  * Represents word statistics with total length and count of words.
  */
@@ -13,17 +15,17 @@ public record WordStats(long totalLength, long count) {
     }
 
     /**
-     * Merges this WordStats with another WordStats.
+     * Merges this synchronizedCollection.WordStats with another synchronizedCollection.WordStats.
      *
-     * @param other The other WordStats to merge with.
-     * @return A new WordStats instance with combined values.
+     * @param other The other synchronizedCollection.WordStats to merge with.
+     * @return A new synchronizedCollection.WordStats instance with combined values.
      */
     public WordStats merge(WordStats other) {
         return new WordStats(totalLength + other.totalLength, count + other.count);
     }
 
     /**
-     * Returns a string representation of this WordStats.
+     * Returns a string representation of this synchronizedCollection.WordStats.
      *
      * @return A string detailing total length, count, and average of words.
      */

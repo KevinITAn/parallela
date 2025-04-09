@@ -1,3 +1,5 @@
+package reentrantLock;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -5,14 +7,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class TextualFileStats {
-    private final ConcurrentMap<Integer, Long> wordLengthCounts = new ConcurrentHashMap<>();
-    //add functionality
-    private final ConcurrentMap<Character, String> longestWordByStartChar = new ConcurrentHashMap<>();
-    private final ConcurrentMap<Character,WordStats> averageWordStats  = new ConcurrentHashMap<>();
+    private final Map<Integer, Long> wordLengthCounts = new HashMap<>();
+    private final ReentrantLock lock = new ReentrantLock();
 
     private void readAndProcessFile(Path filePath) {
         try {
@@ -24,14 +23,17 @@ public class TextualFileStats {
                         continue;
                     }
                     final int length = word.length();
-                    final char firstChar = word.charAt(0);
 
-                    wordLengthCounts.compute(length, (key, value) -> value == null ? 1L : value + 1);
-                    longestWordByStartChar.compute(firstChar,(key,value)-> value==null || word.length()>value.length() ? word : value);
-                    averageWordStats.compute(firstChar, (key, existingStats) -> {
-                        WordStats newStats = new WordStats(word.length(), 1);
-                        return (existingStats == null) ? newStats : existingStats.merge(newStats);
-                    });
+                    lock.lock();
+                    try {
+                        if (!wordLengthCounts.containsKey(length)) {
+                            wordLengthCounts.put(length, 1L);
+                        } else {
+                            wordLengthCounts.put(length, wordLengthCounts.get(length) + 1);
+                        }
+                    } finally {
+                        lock.unlock();
+                    }
                 }
             }
         } catch (IOException e) {
@@ -86,7 +88,12 @@ public class TextualFileStats {
 
         // Print the results
         final StringBuilder sb = new StringBuilder();
-        wordLengthCounts.forEach((k, v) -> sb.append(String.format("(%s: %s)", k, v)));
+        lock.lock();
+        try {
+            wordLengthCounts.forEach((k, v) -> sb.append(String.format("(%s: %s)", k, v)));
+        } finally {
+            lock.unlock();
+        }
         System.out.println("Final stats : " + sb);
     }
 
