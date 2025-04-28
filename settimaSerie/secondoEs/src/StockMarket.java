@@ -4,7 +4,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class StockMarket {
     private static final Map<String,Double> stocksBaseValue=new HashMap<>();
-    private static final ReentrantLock lock=new ReentrantLock();
 
 
 
@@ -52,22 +51,11 @@ public class StockMarket {
     //modifica valore della mappa tra -25% e 25%
     private static void updateValue(){
         ThreadLocalRandom random=ThreadLocalRandom.current();
-        lock.lock();
-        try {
-            stocksBaseValue.replaceAll((k, v) -> v + (v * random.nextDouble(-0.25, 0.25)));
-        } finally {
-            lock.unlock();
-        }
-
+        stocksBaseValue.replaceAll((k, v) -> v + (v * random.nextDouble(-0.25, 0.25)));
     }
     //cosi non devo usare i lock e rendo impossibile a broker aggiungere o eliminare robe
     public static Map<String,Double> getStocksBaseValue() {
-        lock.lock();
-        try {
-            return Collections.unmodifiableMap(new HashMap<>(stocksBaseValue));
-        } finally {
-            lock.unlock();
-        }
+        return Collections.unmodifiableMap(new HashMap<>(stocksBaseValue));
     }
 
 }
