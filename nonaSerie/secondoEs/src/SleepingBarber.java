@@ -1,13 +1,11 @@
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.Random;
 
 public class SleepingBarber {
 
-    private static final int CHAIRS = 3;
-    private final BlockingQueue<Customer> waitingRoom = new ArrayBlockingQueue<>(CHAIRS);
-    private final AtomicBoolean barberSleeping = new AtomicBoolean(true);
-    private final Random rand = ThreadLocalRandom.current();
+    // Coda condivisa per i clienti in attesa
+    private final BlockingQueue<String> queue = new ArrayBlockingQueue<>(3);
+    private final Random random = ThreadLocalRandom.current();
 
     public static void main(String[] args) {
         SleepingBarber shop = new SleepingBarber();
@@ -15,76 +13,49 @@ public class SleepingBarber {
     }
 
     public void start() {
-        Thread barberThread = new Thread(new Barber(), "Barber");
-        barberThread.start();
 
-        Thread customerGenerator = new Thread(() -> {
-            int customerId = 1;
+        // Barbiere
+        new Thread(() -> {
             while (true) {
                 try {
-                    Thread.sleep(rand.nextInt(450, 700));
-                    Customer customer = new Customer(customerId++);
-                    Thread t = new Thread(customer, "Customer-" + customer.id);
-                    t.start();
+                    //tempo per controllare
+                    Thread.sleep(random.nextInt(51) + 50);
+
+                    // Il barbiere preleva un cliente dalla coda (attende se la coda è vuota)
+                    String customer = queue.take();
+                    System.out.println("Barber is cutting hair for " + customer);
+
+                    //taglio capelli
+                    Thread.sleep(random.nextInt(501) + 500);
+
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-        });
-        customerGenerator.start();
-    }
+        }).start();
 
-    class Barber implements Runnable {
-        @Override
-        public void run() {
+        new Thread(() -> {
+            int customerNumber = 1;
             while (true) {
                 try {
-                    // Controlla la waiting room ogni 50–100ms
-                    Thread.sleep(rand.nextInt(50, 100));
+                    // arriva cliente
+                    Thread.sleep(random.nextInt(251) + 450);
 
-                    Customer customer = waitingRoom.poll();
-                    if (customer != null) {
-                        barberSleeping.set(false);
-                        System.out.println("Barber is cutting hair of Customer " + customer.id);
-                        Thread.sleep(rand.nextInt(500, 1000)); // taglio capelli
-                        System.out.println("Barber finished with Customer " + customer.id);
+                    // tempo attesa prima di stanza attesa
+                    Thread.sleep(random.nextInt(81) + 80);
+
+                    String customer = "Customer " + customerNumber++;
+                    // Se la coda è piena, il cliente se ne va, altrimenti entra in sala d'attesa
+                    if (!queue.offer(customer)) {
+                        System.out.println(customer + " leaves because no chairs are available.");
                     } else {
-                        // Nessun cliente → dorme
-                        if (!barberSleeping.get()) {
-                            System.out.println("Barber is sleeping...");
-                        }
-                        barberSleeping.set(true);
+                        System.out.println(customer + " is waiting.");
                     }
 
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-        }
+        }).start();
     }
-
-    class Customer implements Runnable {
-        private final Random rand = ThreadLocalRandom.current();
-        private final int id;
-
-        Customer(int id) {
-            this.id = id;
-        }
-
-        @Override
-        public void run() {
-            try {
-                Thread.sleep(rand.nextInt(80, 160)); // tempo per raggiungere la waiting room
-                if (waitingRoom.offer(this)) {
-                    System.out.println("Customer " + id + " is waiting.");
-                } else {
-                    // sala piena → cliente se ne va
-                    System.out.println("Customer " + id + " left (no available chair).");
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
 }
