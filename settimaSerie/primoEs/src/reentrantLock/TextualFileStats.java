@@ -1,3 +1,5 @@
+package reentrantLock;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -5,10 +7,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class TextualFileStats {
-    private final ConcurrentHashMap<Integer, Long> wordLengthCounts = new ConcurrentHashMap<>();
+    private final Map<Integer, Long> wordLengthCounts = new HashMap<>();
+    private final ReentrantLock lock = new ReentrantLock();
 
     private void readAndProcessFile(Path filePath) {
         try {
@@ -21,10 +24,15 @@ public class TextualFileStats {
                     }
                     final int length = word.length();
 
-                    if (!wordLengthCounts.containsKey(length)) {
-                        wordLengthCounts.put(length, 1L);
-                    } else {
-                        wordLengthCounts.put(length, wordLengthCounts.get(length) + 1);
+                    lock.lock();
+                    try {
+                        if (!wordLengthCounts.containsKey(length)) {
+                            wordLengthCounts.put(length, 1L);
+                        } else {
+                            wordLengthCounts.put(length, wordLengthCounts.get(length) + 1);
+                        }
+                    } finally {
+                        lock.unlock();
                     }
                 }
             }
@@ -35,15 +43,18 @@ public class TextualFileStats {
 
     private void computeStats() {
         int statsCount = 1;
-        while (true) {
+        while (!Thread.currentThread().isInterrupted()) {
             final StringBuilder sb = new StringBuilder();
-            wordLengthCounts.forEach((k, v) -> sb.append(String.format("(%s: %s)", k, v)));
+            synchronized (wordLengthCounts) {
+                wordLengthCounts.forEach((k, v) -> sb.append(String.format("(%s: %s)", k, v)));
+            }
             System.out.println("Stats " + statsCount++ + ": " + sb);
 
             try {
                 Thread.sleep(25);
             } catch (InterruptedException e) {
                 System.err.println("Interrupted while computing stats");
+                Thread.currentThread().interrupt();
                 break;
             }
         }
@@ -77,13 +88,18 @@ public class TextualFileStats {
 
         // Print the results
         final StringBuilder sb = new StringBuilder();
-        wordLengthCounts.forEach((k, v) -> sb.append(String.format("(%s: %s)", k, v)));
+        lock.lock();
+        try {
+            wordLengthCounts.forEach((k, v) -> sb.append(String.format("(%s: %s)", k, v)));
+        } finally {
+            lock.unlock();
+        }
         System.out.println("Final stats : " + sb);
     }
 
     public static void main(String[] args) {
         // TODO: update rootFolder
-        final Path rootFolder = Path.of("07 - Concurrent BB - Part 1\\assignment07\\es1");
+        final Path rootFolder = Path.of("C:\\Users\\kevin\\OneDrive\\Documenti\\GitHub\\parallela\\settimoEs\\primoEs\\src");
         new TextualFileStats().process(List.of(
                 rootFolder.resolve("pride-and-prejudice.txt"),
                 rootFolder.resolve("moby-dick.txt"),

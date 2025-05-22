@@ -1,6 +1,12 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
+
+enum Status {
+    THINKING, HUNGRY, EATING
+}
 
 class Fork {
     private boolean taken = false;

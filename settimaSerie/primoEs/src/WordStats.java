@@ -32,5 +32,3 @@ public record WordStats(long totalLength, long count) {
         return "totalLength=" + totalLength + ", count=" + count + ", average=" + average();
     }
 }
-
-
